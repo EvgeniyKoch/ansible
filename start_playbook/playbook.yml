@@ -1,0 +1,14 @@
+---
+- hosts: webservers
+  become: yes
+
+  tasks:
+    - name: install git
+      ansible.builtin.apt:
+        name: git
+        state: present
+
+    - name: remove git
+      ansible.builtin.apt:
+        name: git
+        state: absent
