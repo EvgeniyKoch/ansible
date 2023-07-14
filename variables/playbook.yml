@@ -1,0 +1,32 @@
+---
+- hosts: webservers
+  become: yes
+  vars:
+    root_dir: /usr/share/nginx/html
+    nginx_port: 80
+
+  tasks:
+    - name: instal nginx
+      ansible.builtin.apt:
+        name: nginx
+        state: present
+
+    - name: Template html file
+      ansible.builtin.template:
+        src: files/index.html
+        dest: '{{root_dir}}/index.html'
+      notify:
+        - Restart nginx
+
+    - name: Template configuration file
+      ansible.builtin.template:
+        src: files/nginx.conf
+        dest: /etc/nginx/nginx.conf
+      notify:
+        - Restart nginx
+
+  handlers:
+    - name: Restart nginx
+      ansible.builtin.service:
+        name: nginx
+        state: reloaded
