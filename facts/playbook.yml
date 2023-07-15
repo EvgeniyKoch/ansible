@@ -1,0 +1,12 @@
+---
+- hosts: webservers
+  # gather_facts - playbook without collecting facts,
+  # this will speed up the execution process if they are not needed
+  gather_facts: no
+  become: yes
+
+  tasks:
+    - name: instal git
+      ansible.builtin.apt:
+        name: git
+        state: present
