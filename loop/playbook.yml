@@ -1,0 +1,56 @@
+---
+- hosts: all
+  gather_facts: no
+  # vars_files for loop into playbook
+  vars_files:
+    - files/vars.yml
+  become: yes
+
+  tasks:
+    - name: install git
+      ansible.builtin.apt:
+        name: git
+        state: present
+
+    - name: Create users
+      ansible.builtin.user:
+        name: "{{ item.name }}"
+        state: present
+      loop: "{{ users }}"
+
+    - name: Create home directories
+      ansible.builtin.file:
+        path: "/home/{{ item.name }}"
+        state: directory
+        mode: '0700'
+      loop: "{{ users }}"
+
+    - name: Create Git config file
+      ansible.builtin.template:
+        src: "files/gitconfig.j2"
+        dest: "/home/{{ item.name }}/.gitconfig"
+        owner: "{{ item.name }}"
+        mode: '0600'
+      loop: "{{ users }}"
+
+    - name: Create .ssh directory
+      ansible.builtin.file:
+        path: "/home/{{ item.name }}/.ssh"
+        state: directory
+        mode: "0700"
+      loop: "{{ users }}"
+
+    - name: Create users authorized keys
+      ansible.builtin.template:
+        src: "/Users/parovoz/.ssh/id_rsa.pub"
+        dest: "/home/{{ item.name }}/.ssh/authorized_keys"
+        owner: "{{ item.name }}"
+        mode: '0600'
+      loop: "{{ users }}"
+
+    - name: Set correct ownership for home directories
+      ansible.builtin.file:
+        path: "/home/{{ item.name }}"
+        owner: "{{ item.name }}"
+        recurse: yes
+      loop: "{{ users }}"
