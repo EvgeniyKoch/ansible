@@ -1,0 +1,19 @@
+- hosts: localhost
+  vars:
+    server_descr: This server is {{ ansible_hostname }}
+    deploy_date_day: "{{ ansible_date_time.date.split('-') | reverse | join('-') }}"
+    deploy_date_time: "{{ ansible_date_time.time }}"
+
+  tasks:
+    - name: Debug deploy date variables
+      ansible.builtin.debug:
+        var: deploy_date_day
+
+    - name: Debug deploy time variables
+      ansible.builtin.debug:
+        var: deploy_date_time
+
+    - name: Create a file
+      ansible.builtin.template:
+        src: templates/index.html.j2
+        dest: index.html
