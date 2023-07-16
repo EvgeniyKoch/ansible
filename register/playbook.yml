@@ -1,0 +1,25 @@
+- hosts: webservers
+  become: yes
+  vars:
+    server_descr: This server is {{ ansible_hostname }}
+    deploy_date_day: "{{ ansible_date_time.date.split('-') | reverse | join('-') }}"
+    deploy_date_time: "{{ ansible_date_time.time }}"
+
+  tasks:
+    - name: Install cowsay
+      ansible.builtin.apt:
+        name: cowsay
+        state: present
+
+    - name: Copy cowsay output
+      ansible.builtin.command: /usr/games/cowsay {{ server_descr }}
+      register: cowsay_output
+
+    - name: Debugg cowsay output
+      ansible.builtin.debug:
+        var: cowsay_output
+
+    - name: Copy html
+      ansible.builtin.template:
+        src: templates/index.html.j2
+        dest: index.html
