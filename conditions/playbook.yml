@@ -1,0 +1,39 @@
+- hosts: all
+  become: yes
+  vars_files:
+    - files/vars.yml
+
+  tasks:
+    - name: Update apt cache
+      ansible.builtin.apt:
+        update_cache: yes
+      when: ansible_distribution == 'Debian'
+
+    - name: Install git
+      ansible.builtin.apt:
+        name: git
+        state: present
+
+    - name: Create users
+      ansible.builtin.user:
+        name: "{{ item.name }}"
+        state: present
+      loop: "{{ users }}"
+      when: item.distribution == ansible_distribution
+
+    - name: Create home directories
+      ansible.builtin.file:
+        path: "/home/{{ item.name }}"
+        state: directory
+        mode: '0700'
+      loop: "{{ users }}"
+      when: item.distribution == ansible_distribution
+
+    - name: Create Git config file
+      ansible.builtin.template:
+        src: "files/gitconfig.j2"
+        dest: "/home/{{ item.name }}/.gitconfig"
+        owner: "{{ item.name }}"
+        mode: '0600'
+      loop: "{{ users }}"
+      when: item.distribution == ansible_distribution

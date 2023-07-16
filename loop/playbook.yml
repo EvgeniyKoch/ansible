@@ -3,7 +3,7 @@
   gather_facts: no
   # vars_files for loop into playbook
   vars_files:
-    - files/vars.yml
+    - files/files.yml
   become: yes
 
   tasks:

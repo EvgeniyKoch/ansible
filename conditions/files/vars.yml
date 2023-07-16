@@ -1,0 +1,5 @@
+---
+users:
+  - { name: jaime, email: jaime@mail.com, distribution: 'Ubuntu' }
+  - { name: sansa, email: sansa@mail.com, distribution: 'Ubunt' }
+  - { name: robert , email: robert@mail.com, distribution: 'Debian' }
