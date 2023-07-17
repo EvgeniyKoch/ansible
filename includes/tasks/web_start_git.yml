@@ -1,0 +1,5 @@
+---
+- name: "{{ title }}"
+  ansible.builtin.apt:
+    name: git
+    state: latest

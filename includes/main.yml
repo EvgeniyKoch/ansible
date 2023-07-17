@@ -1,0 +1,14 @@
+- hosts: all
+  become: yes
+  gather_facts: no
+
+  tasks:
+    - name: Play
+      ansible.builtin.debug:
+        msg: play
+
+- name: Include web_server playbook
+  ansible.builtin.import_playbook: ./playbooks/web_server.yml
+  vars:
+    git_title: ---INSTALL GIT---
+

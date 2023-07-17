@@ -1,0 +1,6 @@
+- name: Create user
+  ansible.builtin.user:
+    name: John
+    state: present
+    comment: John Doe
+    uid: 1040
