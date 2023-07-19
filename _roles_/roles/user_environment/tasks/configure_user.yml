@@ -1,0 +1,7 @@
+---
+- name: Copy a git config
+  ansible.builtin.template:
+    src: ../../files/gitconfig.j2
+    dest: "/home/{{ name }}/.gitconfig"
+    owner: "{{ name }}"
+    mode: '0644'

@@ -1,0 +1,21 @@
+---
+- name: Create user
+  ansible.builtin.debug:
+    msg: "{{ name }}"
+
+- name: Create user
+  ansible.builtin.user:
+    name: "{{ name }}"
+    state: present
+
+- name: Setting a password for the user
+  ansible.builtin.user:
+    name: "{{ name }}"
+    password: "{{ name }}"
+
+- name: Create user directory if it doesn't exist
+  ansible.builtin.file:
+    path: "/home/{{ name }}"
+    state: directory
+    recurse: yes
+    owner: hexlet

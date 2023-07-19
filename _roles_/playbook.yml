@@ -1,0 +1,17 @@
+- hosts: webservers
+  become: yes
+  vars:
+    userName: hexlet
+    userEmail: hexlet@mail.com
+
+  roles:
+    - role: common
+    - role: geerlingguy.git
+    - role: geerlingguy.nodejs
+    - role: geerlingguy.docker
+
+    - role: user_environment
+      vars:
+        username: "{{ userName }}"
+        generate_git_config: false
+      tags: start_user_environment
